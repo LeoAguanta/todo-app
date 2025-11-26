@@ -1,12 +1,17 @@
-﻿using todo_app.Application.Common.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using todo_app.Application.Common.Interfaces;
 using todo_app.Domain.Constants;
 using todo_app.Infrastructure.Data;
 using todo_app.Infrastructure.Data.Interceptors;
 using todo_app.Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
+using TodoApp.Application.Common.Interfaces;
+using TodoApp.Application.Interfaces.Repositories;
+using TodoApp.Domain.Common.Interfaces;
+using TodoApp.Infrastructure.Persistence;
+using TodoApp.Infrastructure.Persistence.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -28,7 +33,15 @@ public static class DependencyInjection
             options.UseSqlServer(connectionString);
         });
 
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IReadRepository<>), typeof(Repository<>));
+        services.AddScoped<ITodoRepository, TodoRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 

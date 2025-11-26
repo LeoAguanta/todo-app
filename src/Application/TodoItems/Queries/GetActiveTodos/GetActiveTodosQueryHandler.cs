@@ -1,10 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
-using TodoApp.Application.TodoItems.Dto;
 using TodoApp.Application.Common.Interfaces;
+using TodoApp.Application.TodoItems.Dto;
 
 namespace TodoApp.Application.TodoItems.Queries
 {
@@ -26,9 +21,8 @@ namespace TodoApp.Application.TodoItems.Queries
             {
                 Id = t.Id,
                 Title = t.Title,
-                IsComplete = t.IsComplete,
-                DueDate = t.DueDate,
-                CreatedAt = t.CreatedAt
+                IsComplete = t.Done,
+                CreatedAt = t.Created
             }).ToList();
         }
     }

@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using todo_app.Application.Common.Interfaces;
 using todo_app.Domain.Entities;
 using todo_app.Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace todo_app.Infrastructure.Data;
 

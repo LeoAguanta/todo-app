@@ -1,6 +1,7 @@
-﻿using todo_app.Application.Common.Interfaces;
-using todo_app.Domain.Entities;
+﻿using todo_app.Domain.Entities;
 using todo_app.Domain.Events;
+using TodoApp.Application.Common.Interfaces;
+using TodoApp.Domain.Common.Interfaces;
 
 namespace todo_app.Application.TodoItems.Commands.CreateTodoItem;
 
@@ -13,11 +14,13 @@ public record CreateTodoItemCommand : IRequest<int>
 
 public class CreateTodoItemCommandHandler : IRequestHandler<CreateTodoItemCommand, int>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IRepository<TodoItem> _repository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateTodoItemCommandHandler(IApplicationDbContext context)
+    public CreateTodoItemCommandHandler(IRepository<TodoItem> repository, IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _repository = repository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<int> Handle(CreateTodoItemCommand request, CancellationToken cancellationToken)
@@ -31,9 +34,9 @@ public class CreateTodoItemCommandHandler : IRequestHandler<CreateTodoItemComman
 
         entity.AddDomainEvent(new TodoItemCreatedEvent(entity));
 
-        _context.TodoItems.Add(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _repository.AddAsync(entity);
+        await _unitOfWork.SaveChangesAsync();
 
         return entity.Id;
     }
